@@ -5,34 +5,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Django CRUD</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'main.css' %}">    
 </head>
-<body >
-    
-    <h1>Task</h1>
-    <form action="{% url 'create_task'%}" method="POST">
-        {% csrf_token %}
-
-        <input type="text" name="title" placeholder="Write a title" >
-        <textarea name="description" rows="3" placeholder="Write a description"></textarea>
-        <button type="submit" class="btn btn-primary">Save</button>
-
-    </form>
-
-    {% for tasks in tasks %}
-        <div>
-            <h4>{{ tasks.title }}</h4>
-            <p>{{ tasks.description }}</p>
-            <form action="{% url 'delete_task' tasks.id%}" method="POST">
-                {% csrf_token %}
-                <button class="btn btn-danger">Delete</button>
-            </form>            
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="text-center mb-4">
+                    <h1 class="display-5 fw-bold text-primary">Gestor de Tareas</h1>
+                    <p class="lead">Agrega, visualiza y elimina tus tareas fácilmente</p>
+                </div>
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <form action="{% url 'create_task'%}" method="POST">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <input type="text" name="title" class="form-control" placeholder="Título de la tarea" required>
+                            </div>
+                            <div class="mb-3">
+                                <textarea name="description" rows="3" class="form-control" placeholder="Descripción" style="resize: none;"></textarea>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <h3 class="mb-3 text-secondary">Tus tareas</h3>
+                {% for tasks in tasks %}
+                    <div class="card mb-3 border-primary shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title mb-1 text-primary">{{ tasks.title }}</h5>
+                                    <p class="card-text text-muted mb-2">{{ tasks.description }}</p>
+                                </div>
+                                <form action="{% url 'delete_task' tasks.id%}" method="POST" class="ms-3">
+                                    {% csrf_token %}
+                                    <button class="btn btn-outline-danger btn-sm">Eliminar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="alert alert-info text-center">No hay tareas</div>
+                {% endfor %}
+            </div>
         </div>
-    {% empty %}
-        <h5>No hay tareas</h5>    
-    {% endfor %}
-
+    </div>
 </body>
 </html>
