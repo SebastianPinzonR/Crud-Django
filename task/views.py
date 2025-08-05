@@ -4,7 +4,9 @@ from .models import Task
 # Create your views here.
 
 def list_tasks(request):
-    return render(request, 'list_task.html')
+    tasks = Task.objects.all()
+    print(tasks)
+    return render(request, 'list_task.html', {"tasks": tasks})
 
 def create_task(request):
     #aqui no se castea el request.POST
@@ -15,4 +17,9 @@ def create_task(request):
     # task= Task(title = request.POST['title'],
     #      description = request.POST['description']).save()
     # task.save()
+    return redirect('/tasks/')
+
+#funcion para eliminar una tarea
+def delete_task(request, task_id):
+    Task.objects.get(id=task_id).delete()
     return redirect('/tasks/')
